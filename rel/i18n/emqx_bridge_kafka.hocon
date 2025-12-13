@@ -137,6 +137,12 @@ auth_kerberos_principal.desc:
 auth_kerberos_principal.label:
 """Kerberos Principal"""
 
+auth_kerberos_service_name.desc:
+"""Huawei Cloud MRS Kafka Kerberos service name override for SASL GSSAPI authentication. This is equivalent to Java's <code>kerberos.domain.name</code> configuration. When Kafka brokers return IP addresses in metadata instead of hostnames, the Kerberos authentication will fail because it tries to look for service principal like <code>kafka/192.168.0.1@REALM</code>. Set this to the actual hostname part of the Kafka service principal (e.g., <code>hadoop.example.com</code>) to override the broker hostname/IP when constructing the service principal for Kerberos authentication."""
+
+auth_kerberos_service_name.label:
+"""Kerberos Service Name"""
+
 socket_opts.desc:
 """Extra socket options."""
 

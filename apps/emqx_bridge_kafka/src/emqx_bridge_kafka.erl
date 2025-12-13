@@ -307,6 +307,11 @@ fields(auth_gssapi_kerberos) ->
             mk(binary(), #{
                 required => true,
                 desc => ?DESC(auth_kerberos_keytab_file)
+            })},
+        {kerberos_service_name,
+            mk(binary(), #{
+                required => false,
+                desc => ?DESC(auth_kerberos_service_name)
             })}
     ];
 fields(socket_opts) ->

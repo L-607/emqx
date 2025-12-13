@@ -24,6 +24,8 @@
     scram_sha256_auth/0,
     scram_sha512_auth/0,
     kerberos_auth/0,
+    kerberos_auth_with_service_name/0,
+    kerberos_auth_with_service_name/1,
 
     kafka_hosts_direct/0,
 
@@ -277,6 +279,16 @@ kerberos_auth() ->
     #{
         <<"kerberos_principal">> => <<"rig@KDC.EMQX.NET">>,
         <<"kerberos_keytab_file">> => shared_secret(rig_keytab)
+    }.
+
+kerberos_auth_with_service_name() ->
+    kerberos_auth_with_service_name(<<"kafka-1.emqx.net">>).
+
+kerberos_auth_with_service_name(ServiceName) ->
+    #{
+        <<"kerberos_principal">> => <<"rig@KDC.EMQX.NET">>,
+        <<"kerberos_keytab_file">> => shared_secret(rig_keytab),
+        <<"kerberos_service_name">> => ServiceName
     }.
 
 msk_iam_auth() ->

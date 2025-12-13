@@ -42,6 +42,7 @@
 -define(scram_sha256, scram_sha256).
 -define(scram_sha512, scram_sha512).
 -define(kerberos, kerberos).
+-define(kerberos_service_name, kerberos_service_name).
 
 -define(ON(NODE, BODY), erpc:call(NODE, fun() -> BODY end)).
 
@@ -191,6 +192,22 @@ init_per_group(?kerberos, TCConfig) ->
         {auth, kerberos_auth()}
         | TCConfig
     ];
+init_per_group(?kerberos_service_name, TCConfig) ->
+    %% Test kerberos_service_name feature: connect to Kafka using IP address
+    %% but override the service principal hostname with kerberos_service_name.
+    %% This simulates the scenario where Kafka returns IP addresses in metadata
+    %% instead of hostnames (e.g., Huawei FusionInsight MRS).
+    %% kafka-1.emqx.net has fixed IP 172.100.239.10 in docker-compose-kafka.yaml
+    Host = "172.100.239.10",
+    Port = 9095,
+    [
+        {kafka_host, Host},
+        {kafka_port, Port},
+        {enable_tls, true},
+        {tls_config, emqx_bridge_kafka_testlib:valid_ssl_settings()},
+        {auth, kerberos_auth_with_service_name()}
+        | TCConfig
+    ];
 init_per_group(_Group, TCConfig) ->
     TCConfig.
 
@@ -281,6 +298,9 @@ scram_sha512_auth() ->
 
 kerberos_auth() ->
     emqx_bridge_kafka_testlib:kerberos_auth().
+
+kerberos_auth_with_service_name() ->
+    emqx_bridge_kafka_testlib:kerberos_auth_with_service_name().
 
 msk_iam_auth() ->
     emqx_bridge_kafka_testlib:msk_iam_auth().

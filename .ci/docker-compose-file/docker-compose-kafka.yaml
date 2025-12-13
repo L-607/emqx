@@ -51,6 +51,7 @@ services:
       KAFKA_SSL_KEY_PASSWORD: password
     networks:
       emqx_bridge:
+        ipv4_address: 172.100.239.10
     volumes:
       - /tmp/emqx-ci/emqx-shared-secret:/var/lib/secret-ro:ro
       - ./kafka/jaas.conf:/etc/kafka/jaas.conf

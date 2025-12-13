@@ -36,11 +36,18 @@ sasl(#{mechanism := oauth, grant_type := client_credentials} = Opts) ->
     }};
 sasl(#{mechanism := Mechanism, username := Username, password := Secret}) ->
     {Mechanism, Username, Secret};
-sasl(#{
-    kerberos_principal := Principal,
-    kerberos_keytab_file := KeyTabFile
-}) ->
-    {callback, brod_gssapi, {gssapi, KeyTabFile, Principal}}.
+sasl(
+    #{
+        kerberos_principal := Principal,
+        kerberos_keytab_file := KeyTabFile
+    } = Opts
+) ->
+    case maps:get(kerberos_service_name, Opts, undefined) of
+        undefined ->
+            {callback, brod_gssapi, {gssapi, KeyTabFile, Principal}};
+        ServiceName ->
+            {callback, brod_gssapi, {gssapi, KeyTabFile, Principal, ServiceName}}
+    end.
 
 %% Extra socket options, such as sndbuf size etc.
 socket_opts(Opts) when is_map(Opts) ->
